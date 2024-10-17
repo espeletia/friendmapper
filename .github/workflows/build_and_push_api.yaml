@@ -70,6 +70,6 @@ jobs:
           file: ./hradec/ci/Dockerfile
           context: .
           push: true
-          tags: docker.io/espeletia/hradec_hac_api:latest, harbor.nextap.codes/espeletia/hradec_hac_api:${{ env.SHORT_SHA }}
+          tags: docker.io/espeletia/hradec_hac_api:latest, docker.io/espeletia/hradec_hac_api:${{ env.SHORT_SHA }}
 
 
