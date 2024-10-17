@@ -1,6 +1,6 @@
 .input {
     width: 100%;
-    padding: 10px;
+    padding: 10px 0 10px 0;
     border: 1px solid #ccc;
     border-radius: 12px; /* Rounded corners */
     font-size: 16px;

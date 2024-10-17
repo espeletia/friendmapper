@@ -8,8 +8,8 @@ const AuthDialog = () => {
   return (
     <div>
       <div className={styles['justify-center']}>
-        <h1>
-          Prozkoumej<br /><span>Královehradecký kraj</span>
+        <h1 className={styles.heading}>
+          Friends<span className={styles.hk}>HK</span>
         </h1>
         <InputField type="email" placeholder="E-mail" />
         <InputField type="password" placeholder="Heslo" />

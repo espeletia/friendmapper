@@ -3,6 +3,7 @@
     margin-top: 36px;
 }
 
+
 .smallGap{
     margin-top:12px;
 }
@@ -12,4 +13,17 @@
     justify-content: center;
     
     flex-direction: column;
+    padding: 3rem 4rem 3rem 4rem;
+}
+
+.hk{
+    color: #6D65FC;
+}
+
+.heading{
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 48px;
+    line-height: 32px;
+    align-self: center;
 }
