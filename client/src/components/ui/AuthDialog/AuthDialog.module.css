@@ -1,0 +1,15 @@
+
+.gap{
+    margin-top: 36px;
+}
+
+.smallGap{
+    margin-top:12px;
+}
+
+.justify-center{
+    display: flex;
+    justify-content: center;
+    
+    flex-direction: column;
+}
