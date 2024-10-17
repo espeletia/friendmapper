@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hradec
+  labels:
+    app: hradec
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hradec
+  template:
+    metadata:
+      labels:
+        app: hradec
+    spec:
+      initContainers:
+        - name: hradec-migrations
+          image: hradec-migrations
+          command: ["/app/run_migrations"]
+          env:
+            - name: SERVICE_NAME
+              value: hradec-migrations
+            - name: DATABASE_URL
+              value: "postgres://postgres:postgres@postgresql-hradec-database:5432/hradec?sslmode=disable"
+      containers:
+        - name: hradec
+          image: hradec
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HRADEC_PORT
+              value: "8080"
+            - name: SERVICE_NAME
+              value: hradec
+            - name: DATABASE_URL
+              value: "postgres://postgres:postgres@postgresql-hradec-database:5432/demeter?sslmode=disable"
+            - name: ENABLE_FILE_LOGGER
+              value: "true"
+            - name: ENABLE_DEBUG_LOGGER
+              value: "false"
+            - name: FILE_LOG_OUTPUT
+              value: "stdout"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hradec
+  labels:
+    app: hradec
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: hradec
+
