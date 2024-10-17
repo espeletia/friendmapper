@@ -62,6 +62,7 @@ func setupService(configuration *config.Config) (*HradecServerComponents, error)
 	router.Handle("/", placeHandler.Ping()).Methods("GET")
 	router.Handle("/places", placeHandler.GetPlacesByViewport()).Methods("POST")
 	router.Handle("/login", userHandler.Login()).Methods("POST")
+	router.Handle("/users", userHandler.GetUsersByUsernamePattern()).Methods("GET")
 	router.Handle("/users-create", userHandler.CreateUser()).Methods("PUT")
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},

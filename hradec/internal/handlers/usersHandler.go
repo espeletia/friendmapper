@@ -84,6 +84,37 @@ func (uu *UserHandler) Login() http.HandlerFunc {
 	}
 }
 
+func (uu *UserHandler) GetUsersByUsernamePattern() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		usernamePattern := r.URL.Query().Get("username")
+		if usernamePattern == "" {
+			http.Error(w, "username pattern is required", http.StatusBadRequest)
+			return
+		}
+
+		// Call the usecase to get users by username pattern
+		users, err := uu.userUsecase.GetByUsernameSimilar(ctx, usernamePattern)
+		if err != nil {
+			http.Error(w, "failed to get users", http.StatusInternalServerError)
+			return
+		}
+
+		// Map domain users to model users
+		modelUsers := make([]models.User, len(users))
+		for i, u := range users {
+			modelUsers[i] = mapDomainUserToModelUser(u)
+		}
+
+		// Convert the result to JSON and write to the response
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(modelUsers)
+		if err != nil {
+			http.Error(w, "failed to encode response", http.StatusInternalServerError)
+		}
+	}
+}
+
 func mapModelUserCreds(usr models.LoginCreds) domain.LoginCreds {
 	return domain.LoginCreds{
 		Email:    usr.Email,

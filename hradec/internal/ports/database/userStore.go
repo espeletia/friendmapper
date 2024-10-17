@@ -83,6 +83,34 @@ func (udbs *UserDatabaseStore) GetUserById(ctx context.Context, id int64) (*doma
 	return mapUserFromDB(dest[0])
 }
 
+func (uds *UserDatabaseStore) GetUsersByUsernamePattern(ctx context.Context, usernamePattern string) ([]domain.User, error) {
+	searchPattern := usernamePattern + "%"
+	stmt := table.Users.SELECT(
+		table.Users.ID,
+		table.Users.DisplayName,
+		table.Users.Email,
+		table.Users.Username,
+	).WHERE(
+		table.Users.Username.LIKE(postgres.String(searchPattern)),
+	)
+
+	dest := []model.Users{}
+	err := stmt.QueryContext(ctx, uds.DB, &dest)
+	if err != nil {
+		return nil, err
+	}
+
+	result := []domain.User{}
+	for _, usr := range dest {
+		usr, err := mapUserFromDB(usr)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *usr)
+	}
+	return result, nil
+}
+
 func mapUserFromDB(usr model.Users) (*domain.User, error) {
 	return &domain.User{
 		ID:             int64(usr.ID),

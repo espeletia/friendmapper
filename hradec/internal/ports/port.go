@@ -13,6 +13,7 @@ type UserDatabaseStore interface {
 	CreateUser(ctx context.Context, user domain.UserData, skipValidation bool) (*domain.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
 	GetUserById(ctx context.Context, id int64) (*domain.User, error)
+	GetUsersByUsernamePattern(ctx context.Context, usernamePattern string) ([]domain.User, error)
 }
 
 type TokenGeneratorAuthInterface interface {

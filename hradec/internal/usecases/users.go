@@ -47,6 +47,10 @@ func (uu *UserUsecase) CreateUser(ctx context.Context, user domain.UserData, pas
 	return stored, nil
 }
 
+func (uu *UserUsecase) GetByUsernameSimilar(ctx context.Context, username string) ([]domain.User, error) {
+	return uu.store.GetUsersByUsernamePattern(ctx, username)
+}
+
 func (uu *UserUsecase) GetUserById(ctx context.Context, Id int64) (*domain.User, error) {
 	return uu.store.GetUserById(ctx, Id)
 }
