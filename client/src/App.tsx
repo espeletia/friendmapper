@@ -4,6 +4,7 @@ import ErrorRoute from "./routes/error";
 import { LeafletProvider } from "./components/Leaflet/context/LeafletContext";
 import MapRoute from "./routes/map";
 import Root from "./routes/root";
+import AuthDialogRoute from "./routes/authDialog";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,11 @@ const router = createBrowserRouter([
         element: <MapRoute />,
         errorElement: <ErrorRoute />,
       },
+      {
+        path: "auth",
+        element: <AuthDialogRoute />,
+        errorElement: <ErrorRoute />,
+      }
     ],
   },
 ]);
