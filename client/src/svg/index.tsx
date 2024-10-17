@@ -1030,3 +1030,72 @@ export const Check = (props: Props) => {
     </svg>
   );
 };
+
+export const User = (props: Props) => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={props.className}
+    >
+      <path
+        d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
+        stroke="#020617"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+        stroke="#020617"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const Bookmark = (props: Props) => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={props.className}
+    >
+      <path
+        d="M19 21L12 17L5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21Z"
+        stroke="#020617"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const CrossBlack = (props: Props) => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={props.className}
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M20.5657 4.56563C20.878 4.25322 20.878 3.74669 20.5657 3.43428C20.2532 3.12184 19.7467 3.12184 19.4342 3.43428L12 10.8686L4.56563 3.43428C4.25322 3.12184 3.74669 3.12184 3.43428 3.43428C3.12184 3.74669 3.12184 4.25322 3.43428 4.56563L10.8686 12L3.43428 19.4342C3.12184 19.7467 3.12184 20.2532 3.43428 20.5657C3.74669 20.878 4.25322 20.878 4.56563 20.5657L12 13.1313L19.4342 20.5657C19.7467 20.878 20.2532 20.878 20.5657 20.5657C20.878 20.2532 20.878 19.7467 20.5657 19.4342L13.1313 12L20.5657 4.56563Z"
+        fill="#1B1937"
+      />
+    </svg>
+  );
+};

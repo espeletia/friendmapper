@@ -7,7 +7,6 @@ const Root = () => {
   return (
     <div className={styles.container}>
       <Navbar />
-      <p>layout</p>
       <Outlet />
     </div>
   );
