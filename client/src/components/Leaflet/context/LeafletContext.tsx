@@ -4,10 +4,10 @@ import {
   useState,
   ReactNode,
   useMemo,
-  useEffect,
   useRef,
+  useEffect,
 } from "react";
-import type { Marker, MarkerUpdateOptions } from "../../../types";
+import type { Marker, MarkerType, MarkerUpdateOptions } from "../../../types";
 
 interface LeafletContextType {
   markers: Marker[];
@@ -16,6 +16,7 @@ interface LeafletContextType {
     options: MarkerUpdateOptions,
     debounce?: number,
   ) => void;
+  filterMarkers: (keys: MarkerType[]) => void;
 }
 
 interface LeafletProviderProps {
@@ -35,20 +36,50 @@ export const useLeafletContext = () => {
 export const LeafletProvider = (props: LeafletProviderProps) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [markers, setMarkers] = useState<Marker[]>([]);
+  const [fetchedMarkers, setFetchedMarkers] = useState<Marker[]>([]);
+  const [isFiltered, setIsFiltered] = useState(false);
 
   const updateMarkers = (options: MarkerUpdateOptions) => {
     console.log("in fetch options: ", options);
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
-      .then((json) => {
-        console.log("json", json);
-        const newMarkers = json.map((item: any) => ({
-          lat: Math.random() * 180 - 90,
-          lng: Math.random() * 360 - 180,
-          name: item.title,
-        }));
-        setMarkers(newMarkers);
-      });
+
+    const NorthWestLat = options.bounds.getNorth();
+    const NorthWestLng = options.bounds.getWest();
+    const SouthEastLat = options.bounds.getSouth();
+    const SouthEastLng = options.bounds.getEast();
+    const north_west = {
+      lat: NorthWestLat,
+      lon: NorthWestLng,
+    };
+    const south_east = {
+      lat: SouthEastLat,
+      lon: SouthEastLng,
+    };
+
+    try {
+      fetch("https://sea-lion-app-bsvxc.ondigitalocean.app/places", {
+        method: "POST",
+        body: JSON.stringify({
+          north_west,
+          south_east,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          const mutatedData = json.map((item: any) => {
+            return {
+              name: item.name,
+              lat: item.Point.Lat,
+              lng: item.Point.Lon,
+              Accessibility: Boolean(item?.Accessibility),
+              ...item,
+            };
+          });
+          setFetchedMarkers(mutatedData);
+          setMarkers(mutatedData);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const updateMarkersDebounce = (
@@ -63,17 +94,35 @@ export const LeafletProvider = (props: LeafletProviderProps) => {
     }, debounce ?? 1000);
   };
 
-  useEffect(() => {
-    console.log("in provider", markers);
-  }, [markers]);
+  const filterMarkers = (keys: MarkerType[]) => {
+    if (!keys?.length) {
+      setIsFiltered(false);
+      return;
+    }
+
+    const clonedFetchedMarkers = [...fetchedMarkers];
+    const filtered = clonedFetchedMarkers.filter((marker) =>
+      keys.includes(marker.Type),
+    );
+    setIsFiltered(true);
+    setMarkers(filtered);
+  };
 
   const value = useMemo(
     () => ({
-      markers,
+      markers: isFiltered ? markers : fetchedMarkers,
       setMarkers,
       updateMarkersDebounce,
+      filterMarkers,
     }),
-    [markers, setMarkers, updateMarkersDebounce],
+    [
+      markers,
+      fetchedMarkers,
+      isFiltered,
+      setIsFiltered,
+      setMarkers,
+      updateMarkersDebounce,
+    ],
   );
 
   return (

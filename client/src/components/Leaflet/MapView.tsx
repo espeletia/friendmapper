@@ -3,12 +3,29 @@ import L, { LatLngBoundsExpression } from "leaflet";
 import { TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import { Marker as MarkerType, MarkerUpdateOptions } from "../../types";
 
+import baseIconUrl from "../../assets/MarkerBase.svg";
+import festivalIconUrl from "../../assets/Festivaly.svg";
+import theaterIconUrl from "../../assets/Divadla.svg";
+import cinemaIconUrl from "../../assets/Kina.svg";
+import sportIconUrl from "../../assets/Sport.svg";
+
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
+
+const createIcon = (iconUrl: string) => {
+  return L.icon({
+    iconUrl,
+    iconSize: [40, 40], // Adjust based on desired icon size
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+    shadowSize: [41, 41],
+  });
+};
 
 interface Props {
   markers: MarkerType[] | null;
@@ -19,23 +36,25 @@ const MapView = (props: Props) => {
   const map = useMap();
   const isResizeMoveRef = useRef(false);
 
-  useMapEvents({
-    moveend: () => {
-      if (isResizeMoveRef.current) {
-        isResizeMoveRef.current = false;
-        return;
-      }
-
-      const zoom = map.getZoom();
-      const bounds = map.getBounds();
-
-      props.updateMarkers({ bounds, zoom }, 2500);
-      isResizeMoveRef.current = true;
-    },
-  });
+  const getIconByType = (type: string) => {
+    switch (type) {
+      case "KLUBY_FESTIVALY":
+        return createIcon(festivalIconUrl);
+      case "DIVADLA_FILHARMONIE":
+        return createIcon(theaterIconUrl);
+      case "KINA":
+        return createIcon(cinemaIconUrl);
+      case "SPORT":
+        return createIcon(sportIconUrl);
+      default:
+        return createIcon(baseIconUrl);
+    }
+  };
 
   useEffect(() => {
-    if (!props.markers) {
+    if (!props.markers?.length) {
+      console.log("no markers");
+      props.updateMarkers({ bounds: map.getBounds(), zoom: map.getZoom() }, 0);
       return;
     }
 
@@ -56,8 +75,12 @@ const MapView = (props: Props) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       {props?.markers?.map((marker, index) => (
-        <Marker key={index} position={[marker.lat, marker.lng]}>
-          <Popup>{marker.name}</Popup>
+        <Marker
+          icon={getIconByType(marker.Type)}
+          key={index}
+          position={[marker.lat, marker.lng]}
+        >
+          <Popup>{marker.Name}</Popup>
         </Marker>
       ))}
     </div>

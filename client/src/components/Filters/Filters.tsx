@@ -1,15 +1,29 @@
-import { useState } from "react";
-import { Castle, Palete, Song, StrongMan } from "../../svg";
+import { useEffect, useState } from "react";
+import { Camera, Castle, Palete, Song, StrongMan } from "../../svg";
+import { MarkerType } from "../../types";
+import { useLeafletContext } from "../Leaflet/context/LeafletContext";
 import Selector from "./components/Selector";
 import styles from "./Filters.module.css";
 
 const Filters = () => {
+  const { filterMarkers } = useLeafletContext();
+
   const [selectors, setSelectors] = useState([
-    { selected: true, name: "Vše", icon: null, deseletsAll: true },
-    { selected: false, name: "Festivaly", icon: <Song /> },
-    { selected: false, name: "Divadla", icon: <Palete /> },
-    { selected: false, name: "Kina", icon: <Castle />},
-    { selected: false, name: "Sport", icon: <StrongMan />  },
+    { selected: true, name: "Vše", icon: null, deseletsAll: true, key: "all" },
+    {
+      selected: false,
+      name: "Festivaly",
+      icon: <Song />,
+      key: "KLUBY_FESTIVALY",
+    },
+    {
+      selected: false,
+      name: "Divadla",
+      icon: <Palete />,
+      key: "DIVADLA_FILHARMONIE",
+    },
+    { selected: false, name: "Kina", icon: <Camera />, key: "KINA" },
+    { selected: false, name: "Sport", icon: <StrongMan />, key: "SPORT" },
   ]);
 
   const handleChange = (index: number) => {
@@ -36,6 +50,33 @@ const Filters = () => {
       });
     });
   };
+
+  useEffect(() => {
+    const isAnySelected = selectors.some((selector) => selector.selected);
+    if (!isAnySelected) {
+      setSelectors((prev) => {
+        return prev.map((selector, index) => {
+          if (index === 0) {
+            return {
+              ...selector,
+              selected: true,
+            };
+          } else {
+            return {
+              ...selector,
+              selected: false,
+            };
+          }
+        });
+      });
+    }
+
+    const activeKeys: MarkerType[] = selectors
+      .filter((selector) => selector.selected && selector.key !== "all")
+      .map((selector) => selector.key as MarkerType);
+
+    filterMarkers(activeKeys);
+  }, [selectors]);
 
   return (
     <div className={styles.container}>
