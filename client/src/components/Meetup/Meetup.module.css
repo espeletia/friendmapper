@@ -128,3 +128,17 @@
   color: green;
   cursor: pointer;
 }
+
+.container5 {
+  position: absolute;
+    width: 25.1875rem;
+    height: 38rem;
+    z-index: 100000;
+    background-color: white;
+    flex-direction: column;
+    right: 0.5rem;
+    top: -0.5rem;
+    border-radius: 1rem;
+    padding: 1.75rem 1.5rem;
+    box-sizing: border-box;
+}

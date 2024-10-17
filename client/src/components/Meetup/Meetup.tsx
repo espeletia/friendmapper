@@ -9,6 +9,7 @@ import { useState } from "react";
 import Selector from "./Selector";
 import Filters from "../Filters/Filters";
 import cx from "classnames";
+import PlacesList from "./PlacesList";
 
 interface Props {
   closeCallback: VoidFunction;
@@ -23,7 +24,7 @@ const Meetup = (props: Props) => {
 
   
   return (
-    <div className={cx(styles.container, {[styles.container3]: phase === 1})}>
+    <div className={cx(styles.container, {[styles.container3]: phase === 1, [styles.container4]: phase === 2, [styles.container5]: phase === 3})}>
       <div className={styles.header}>
         <h2>Nový meetup</h2>
         <button onClick={props.closeCallback}>
@@ -44,7 +45,7 @@ const Meetup = (props: Props) => {
        </div>
       }
       {
-        phase === 2 && <div className={styles.container4}>
+        phase === 2 && <div>
           Pozvat přátele
           <div className={styles.gap}></div>
           <div className={styles.content}>
@@ -64,7 +65,7 @@ const Meetup = (props: Props) => {
       }
       {
         phase === 3 && <div>
-          
+          <PlacesList></PlacesList>
         </div>
       }
      
@@ -75,8 +76,8 @@ const Meetup = (props: Props) => {
        {phase === 2 ? <div className={styles.smGap}></div> : <div className={styles.gap}></div> } 
         <CustomButton
           size="small"
-          onClick={() => setPhase((phase) => phase + 1)}
-          text="Pokračovat"></CustomButton>
+          onClick={phase !== 3 ? () => setPhase((phase) => phase + 1) : props.closeCallback}
+          text={phase !== 3 ? "Pokračovat" : "Dokončit"}></CustomButton>
     </div>
   );
 };

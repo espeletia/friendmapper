@@ -6,7 +6,6 @@ import styles from "./root.module.css";
 const Root = () => {
   return (
     <div className={styles.container}>
-      <Navbar />
       <Outlet />
     </div>
   );
