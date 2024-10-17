@@ -20,13 +20,15 @@ const SidebarInfo = (props: Props) => {
           </button>
         </div>
         <p>{props.marker.Address}</p>
-        {props.marker.Accessibility && (
+        {props.marker.Accessibility ? (
           <CustomButton
             text="Bezbariérový přístup"
             size="small"
             variant="third"
             onClick={() => {}}
           />
+        ) : (
+          <></>
         )}
         <p>{props.marker.Description}</p>
         <div className={styles.buttons}>
