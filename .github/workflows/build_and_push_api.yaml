@@ -40,14 +40,14 @@ jobs:
           go mod download
           go mod tidy
 
-      - name: run migrations
-        working-directory: ./hradec
-        run: go run ./cmd/migrations/main.go
+      # - name: run migrations
+      #   working-directory: ./hradec
+      #   run: go run ./cmd/migrations/main.go
 
-      - name: generate modules and tables
-        working-directory: ./hradec
-        run: |
-          jet -dsn=postgres://postgres:postgres@localhost:5434/hradec?sslmode=disable -path=./internal/ports/database/gen
+      # - name: generate modules and tables
+      #   working-directory: ./hradec
+      #   run: |
+      #     jet -dsn=postgres://postgres:postgres@localhost:5434/hradec?sslmode=disable -path=./internal/ports/database/gen
 
       - name: Login to docker
         uses: docker/login-action@v2
