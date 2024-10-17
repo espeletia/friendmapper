@@ -1,14 +1,23 @@
+import cx from "classnames";
+import { ReactNode } from "react";
+
 import styles from "./Selector.module.css";
 
 interface Props {
-  text: string;
+  children: ReactNode;
+  index: number;
+  handleChange: (index: number) => void;
+  selected?: boolean;
 }
 
 const Selector = (props: Props) => {
   return (
-    <div className={styles.container}>
-      <p>{props.text}</p>
-    </div>
+    <button
+      onClick={() => props.handleChange(props.index)}
+      className={cx(styles.container, { [styles.selected]: props.selected })}
+    >
+      {props.children}
+    </button>
   );
 };
 

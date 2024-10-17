@@ -1,6 +1,18 @@
 .container {
   border-radius: 2rem;
+  font-weight: 700;
   height: 3rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  background-color: rgba(240, 239, 255, 1);
+  color: rgba(109, 101, 252, 1);
+  border: 0.125rem rgba(240, 239, 255, 1) solid;
+
+  &.selected {
+    border: 0.125rem rgba(109, 101, 252, 1) solid;
+  }
 }
