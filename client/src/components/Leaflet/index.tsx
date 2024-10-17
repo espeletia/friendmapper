@@ -3,7 +3,7 @@ import { useLeafletContext } from "./context/LeafletContext";
 import MapView from "./MapView";
 
 const Leaflet = () => {
-  const { markers } = useLeafletContext();
+  const { markers, updateMarkersDebounce } = useLeafletContext();
 
   return (
     <MapContainer
@@ -11,7 +11,7 @@ const Leaflet = () => {
       zoom={2}
       style={{ height: "100%", width: "100%" }}
     >
-      <MapView markers={markers} />
+      <MapView markers={markers} updateMarkers={updateMarkersDebounce} />
     </MapContainer>
   );
 };

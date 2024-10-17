@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import L, { LatLngBoundsExpression } from "leaflet";
-import { TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { Marker as MarkerType } from "../../types";
+import { TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import { Marker as MarkerType, MarkerUpdateOptions } from "../../types";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -12,20 +12,35 @@ L.Icon.Default.mergeOptions({
 
 interface Props {
   markers: MarkerType[];
+  updateMarkers: (options: MarkerUpdateOptions, debounce?: number) => void;
 }
 
 const MapView = (props: Props) => {
   const map = useMap();
+  const isResizeMoveRef = useRef(false);
+
+  useMapEvents({
+    moveend: () => {
+      if (isResizeMoveRef.current) {
+        isResizeMoveRef.current = false;
+        return;
+      }
+
+      const zoom = map.getZoom();
+      const bounds = map.getBounds();
+
+      props.updateMarkers({ bounds, zoom }, 2500);
+      isResizeMoveRef.current = true;
+    },
+  });
 
   useEffect(() => {
-    if (props.markers.length) {
-      const bounds: LatLngBoundsExpression = props.markers.map((marker) => [
-        marker.lat,
-        marker.lng,
-      ]);
-      map.fitBounds(bounds);
-    }
-  }, [props.markers, map]);
+    const bounds: LatLngBoundsExpression = props.markers.map((marker) => [
+      marker.lat,
+      marker.lng,
+    ]);
+    map.fitBounds(bounds);
+  }, [map]);
 
   return (
     <div>
