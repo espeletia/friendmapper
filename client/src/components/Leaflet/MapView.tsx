@@ -11,7 +11,7 @@ L.Icon.Default.mergeOptions({
 });
 
 interface Props {
-  markers: MarkerType[];
+  markers: MarkerType[] | null;
   updateMarkers: (options: MarkerUpdateOptions, debounce?: number) => void;
 }
 
@@ -35,11 +35,18 @@ const MapView = (props: Props) => {
   });
 
   useEffect(() => {
+    if (!props.markers) {
+      return;
+    }
+
     const bounds: LatLngBoundsExpression = props.markers.map((marker) => [
       marker.lat,
       marker.lng,
     ]);
-    map.fitBounds(bounds);
+
+    if (bounds?.length) {
+      map.fitBounds(bounds);
+    }
   }, [map]);
 
   return (
@@ -48,7 +55,7 @@ const MapView = (props: Props) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {props.markers.map((marker, index) => (
+      {props?.markers?.map((marker, index) => (
         <Marker key={index} position={[marker.lat, marker.lng]}>
           <Popup>{marker.name}</Popup>
         </Marker>
