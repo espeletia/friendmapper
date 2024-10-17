@@ -8,6 +8,10 @@
     margin-top:12px;
 }
 
+.mediumGap{
+    margin-top: 24px;
+}
+
 .justify-center{
     display: flex;
     justify-content: center;

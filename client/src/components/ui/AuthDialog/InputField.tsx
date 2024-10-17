@@ -5,6 +5,7 @@ import cx from 'classnames';
 interface InputProps {
     type: string;
     placeholder: string;
+    title: string | undefined;
     }
 
 
@@ -13,7 +14,7 @@ const InputField = (props: InputProps) => {
   return (
     <div className={cx(styles.fieldContainer, styles.text)}>
         <p>
-            {props.placeholder}
+            {props.title ?? props.placeholder}
         </p>
 <input 
       type={props.type}

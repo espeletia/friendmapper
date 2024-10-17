@@ -11,8 +11,8 @@ const AuthDialog = () => {
         <h1 className={styles.heading}>
           Friends<span className={styles.hk}>HK</span>
         </h1>
-        <InputField type="email" placeholder="E-mail" />
-        <InputField type="password" placeholder="Heslo" />
+        <InputField type="email" placeholder="Email" title="Email"/>
+        <InputField type="password" placeholder="Heslo" title= "Heslo"/>
         <div className={styles.gap}></div>
         <CustomButton text={"Příhlásit se"} onClick={() => null}></CustomButton>
         <div className={styles.smallGap}></div>
