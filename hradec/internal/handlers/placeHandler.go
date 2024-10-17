@@ -42,12 +42,13 @@ func (ph *PlaceHandler) GetPlacesByViewport() http.HandlerFunc {
 		ctx := r.Context()
 		// Decode the JSON body to the `Viewport` struct
 		var viewPort models.Viewport
-		err := json.NewDecoder(r.Body).Decode(&viewPort)
+		huh := map[string]any{}
+		err := json.NewDecoder(r.Body).Decode(&huh)
 		if err != nil {
 			http.Error(w, "invalid request body", http.StatusBadRequest)
 			return
 		}
-		zap.L().Info("viewport", zap.Any("viewport", viewPort))
+		zap.L().Info("viewport", zap.Any("viewport", huh))
 		defer r.Body.Close()
 
 		// Call the database function to get the places

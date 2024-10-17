@@ -31,9 +31,9 @@ func (pds *PlaceDatabaseStore) GetPlacesByViewport(ctx context.Context, viewPort
 		WHERE(
 			postgres.AND(
 				postgres.RawBool(
-					fmt.Sprintf("ST_Within(point, ST_MakeEnvelope(%f, %f, %f, %f, 4326))", viewPort.SouthEast.Lon, viewPort.SouthEast.Lat, viewPort.NorthWest.Lon, viewPort.NorthWest.Lat),
-					// fmt.Sprintf("ST_Within(point, ST_MakeEnvelope($selon, $selat, $nwlon, $nwlat, 4326))"),
-					// postgres.RawArgs{"$selon": viewPort.SouthEast.Lon, "$selat": viewPort.SouthEast.Lat, "$nwlon": viewPort.NorthWest.Lon, "$nwlat": viewPort.NorthWest.Lat},
+					// fmt.Sprintf("ST_Within(point, ST_MakeEnvelope(%f, %f, %f, %f, 4326))", viewPort.SouthEast.Lon, viewPort.SouthEast.Lat, viewPort.NorthWest.Lon, viewPort.NorthWest.Lat),
+					fmt.Sprintf("ST_Within(point, ST_MakeEnvelope($selon, $selat, $nwlon, $nwlat, 4326))"),
+					postgres.RawArgs{"$selon": viewPort.SouthEast.Lon, "$selat": viewPort.SouthEast.Lat, "$nwlon": viewPort.NorthWest.Lon, "$nwlat": viewPort.NorthWest.Lat},
 				),
 			),
 		)
