@@ -6,6 +6,7 @@ import MapRoute from "./routes/map";
 import Root from "./routes/root";
 import AuthDialogRoute from "./routes/authDialog";
 import SearchOverlayRoute from "./routes/searchOverlay";
+import RegisterDialogRoute from "./routes/registerDialog";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
       {
         path: "search",
         element: <SearchOverlayRoute />,
+        errorElement: <ErrorRoute />,
+      },
+      {
+        path: "auth/register",
+        element: <RegisterDialogRoute />,
         errorElement: <ErrorRoute />,
       }
     ],

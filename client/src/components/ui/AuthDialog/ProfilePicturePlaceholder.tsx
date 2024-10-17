@@ -5,7 +5,7 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'left',
     gap: '10px', // Space between label and circle
   } as React.CSSProperties,
 
@@ -61,7 +61,7 @@ const ProfilePicturePlaceholder = (props: ProfilePicturePlaceholderProps) => {
             color: iconColor, // Dynamic color for the plus icon
           }}
         >
-          add
+          +
         </span>
       </div>
     </div>

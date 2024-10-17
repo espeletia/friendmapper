@@ -7,9 +7,10 @@ const Leaflet = () => {
 
   return (
     <MapContainer
-      center={[51.505, -0.09]}
-      zoom={2}
+      center={[50.209722, 15.830473]}
+      zoom={13}
       style={{ height: "100%", width: "100%" }}
+      bounds={[[50.24807831738873, 15.963821411132814], [50.16446904866322, 15.70426940917969]]}
     >
       <MapView markers={markers} updateMarkers={updateMarkersDebounce} />
     </MapContainer>
