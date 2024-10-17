@@ -68,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           file: ./hradec/ci/Dockerfile
-          context: ./hradec
+          context: .
           push: true
           tags: docker.io/espeletia/hradec_hac_api:latest, harbor.nextap.codes/espeletia/hradec_hac_api:${{ env.SHORT_SHA }}
 
