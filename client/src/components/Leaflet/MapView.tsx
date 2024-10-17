@@ -30,6 +30,7 @@ const createIcon = (iconUrl: string) => {
 interface Props {
   markers: MarkerType[] | null;
   updateMarkers: (options: MarkerUpdateOptions, debounce?: number) => void;
+  handleClick: (marker: MarkerType) => void;
 }
 
 const MapView = (props: Props) => {
@@ -79,6 +80,11 @@ const MapView = (props: Props) => {
           icon={getIconByType(marker.Type)}
           key={index}
           position={[marker.lat, marker.lng]}
+          eventHandlers={{
+            click: () => {
+              props.handleClick(marker);
+            },
+          }}
         >
           <Popup>{marker.Name}</Popup>
         </Marker>

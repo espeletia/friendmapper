@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React from "react";
 
 interface ButtonProps {
@@ -6,8 +7,9 @@ interface ButtonProps {
   backgroundColor?: string;
   textColor?: string;
   hoverColor?: string; // Optional hover color
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "third";
   size?: "small" | "large";
+  className?: string;
 }
 
 const CustomButton = (props: ButtonProps) => {
@@ -17,9 +19,27 @@ const CustomButton = (props: ButtonProps) => {
     text,
     size = "large",
     variant = "primary",
-    textColor = variant === "primary" ? "white" : "#EB1C1C", // Default to white text
-    hoverColor = variant === "primary" ? "#5a56d1" : "#FFEDED", // Default hover color (darker purple)
-    backgroundColor = variant === "primary" ? "#6C63FF" : "#FFEDED", // Default to purple if no backgroundColor prop is passed
+    textColor = variant === "primary"
+      ? "white"
+      : variant === "secondary"
+        ? "#EB1C1C"
+        : variant === "third"
+          ? "white"
+          : "white", // Default to white text
+    hoverColor = variant === "primary"
+      ? "#5a56d1"
+      : variant === "secondary"
+        ? "#FFEDED"
+        : variant === "third"
+          ? "rgba(37, 194, 53, 1)"
+          : "white", // Default hover color (darker purple)
+    backgroundColor = variant === "primary"
+      ? "#6C63FF"
+      : variant === "secondary"
+        ? "#FFEDED"
+        : variant === "third"
+          ? "rgba(37, 194, 53, 1)"
+          : "white", // Default to purple if no backgroundColor prop is passed
     onClick,
   } = props;
 
@@ -35,6 +55,7 @@ const CustomButton = (props: ButtonProps) => {
       cursor: "pointer", // Pointer cursor on hover
       transition: "background-color 0.3s ease", // Smooth transition on hover
       height: size === "large" ? "auto" : "2.75rem", // Set height based on size prop
+      ...classNames,
     } as React.CSSProperties,
 
     buttonHover: {
