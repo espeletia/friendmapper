@@ -8,6 +8,7 @@ replace go.uber.org/zap => github.com/ziyaozclk/zap v1.19.3-0.20211130062134-0e5
 require (
 	github.com/XSAM/otelsql v0.35.0
 	github.com/go-jet/jet/v2 v2.11.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gorilla/mux v1.8.1
 	github.com/lib/pq v1.10.9
 	github.com/nextap-solutions/goNextService v0.1.4

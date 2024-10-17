@@ -19,4 +19,5 @@ type Users struct {
 	DisplayName       string
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
+	Email             string
 }

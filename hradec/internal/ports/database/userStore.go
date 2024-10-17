@@ -1,0 +1,94 @@
+package database
+
+import (
+	"context"
+	"database/sql"
+	"hradec/internal/domain"
+	"hradec/internal/ports/database/gen/hradec/public/model"
+	"hradec/internal/ports/database/gen/hradec/public/table"
+
+	"github.com/go-jet/jet/v2/postgres"
+)
+
+func NewUserDatabaseStore(db *sql.DB) *UserDatabaseStore {
+	return &UserDatabaseStore{
+		DB: db,
+	}
+}
+
+type UserDatabaseStore struct {
+	DB *sql.DB
+}
+
+type userWithExtraData struct {
+	model.Users
+	RoleName  string
+	GroupName string
+}
+
+// tests: OK
+func (udbs *UserDatabaseStore) CreateUser(ctx context.Context, user domain.UserData, skipValidation bool) (*domain.User, error) {
+	usrModel := model.Users{
+		Email:        user.Email,
+		DisplayName:  user.DisplayName,
+		Username:     user.Username,
+		PasswordHash: user.Hash,
+	}
+	stmt := table.Users.INSERT(
+		table.Users.Email,
+		table.Users.Username,
+		table.Users.PasswordHash,
+		table.Users.DisplayName).
+		MODEL(usrModel).
+		RETURNING(
+			table.Users.AllColumns,
+		)
+	dest := []model.Users{}
+	err := stmt.QueryContext(ctx, udbs.DB, &dest)
+	if err != nil {
+		return nil, err
+	}
+	return mapUserFromDB(dest[0])
+}
+
+// tests: OK
+func (udbs *UserDatabaseStore) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
+	dest := []model.Users{}
+	stmt := table.Users.SELECT(
+		table.Users.AllColumns,
+	).WHERE(table.Users.Email.EQ(postgres.String(email)))
+	err := stmt.QueryContext(ctx, udbs.DB, &dest)
+	if err != nil {
+		return nil, err
+	}
+	if len(dest) == 0 {
+		return nil, domain.UserNotFound
+	}
+	return mapUserFromDB(dest[0])
+}
+
+// tests: OK
+func (udbs *UserDatabaseStore) GetUserById(ctx context.Context, id int64) (*domain.User, error) {
+	dest := []model.Users{}
+	stmt := table.Users.SELECT(
+		table.Users.AllColumns,
+	).WHERE(table.Users.ID.EQ(postgres.Int(id)))
+	err := stmt.QueryContext(ctx, udbs.DB, &dest)
+	if err != nil {
+		return nil, err
+	}
+	if len(dest) == 0 {
+		return nil, domain.UserNotFound
+	}
+	return mapUserFromDB(dest[0])
+}
+
+func mapUserFromDB(usr model.Users) (*domain.User, error) {
+	return &domain.User{
+		ID:             int64(usr.ID),
+		Username:       usr.Username,
+		DisplayName:    usr.DisplayName,
+		Email:          usr.Email,
+		HashedPassword: usr.PasswordHash,
+	}, nil
+}

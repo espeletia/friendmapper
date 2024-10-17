@@ -3,7 +3,9 @@ package runner
 import (
 	"hradec/internal/config"
 	"hradec/internal/handlers"
+	"hradec/internal/middleware"
 	"hradec/internal/ports/database"
+	"hradec/internal/ports/tokens"
 	"hradec/internal/usecases"
 
 	"encoding/json"
@@ -46,14 +48,21 @@ func setupService(configuration *config.Config) (*HradecServerComponents, error)
 	if err != nil {
 		return nil, err
 	}
+	tokenGenerator := tokens.NewTokenGenerator(configuration.JWTConfig.Signature, configuration.JWTConfig.Expiration)
 	placeStore := database.NewDatabasePlaceStore(dbconn)
+	userStore := database.NewUserDatabaseStore(dbconn)
+	userUsecase := usecases.NewUserUsecase(userStore, configuration.HashConfig.Salt)
 	placeUsecase := usecases.NewPlaceUsecase(placeStore)
-
+	authUsecase := usecases.NewAuthUsecase(userUsecase, tokenGenerator)
+	userHandler := handlers.NewUserHandler(userUsecase, authUsecase)
 	placeHandler := handlers.NewPlaceHandler(placeUsecase)
 
 	router := mux.NewRouter()
+	router.Use(middleware.Authentication(authUsecase))
 	router.Handle("/", placeHandler.Ping()).Methods("GET")
-	router.Handle("/places", placeHandler.GetPlacesByViewport()).Methods("GET")
+	router.Handle("/places", placeHandler.GetPlacesByViewport()).Methods("POST")
+	router.Handle("/login", userHandler.Login()).Methods("POST")
+	router.Handle("/users-create", userHandler.CreateUser()).Methods("PUT")
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedHeaders:   []string{"*"},
