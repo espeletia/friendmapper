@@ -24,4 +24,6 @@ type Places struct {
 	Address           string
 	Point             *string
 	LikeCount         int32
+	Lat               *float64
+	Lon               *float64
 }

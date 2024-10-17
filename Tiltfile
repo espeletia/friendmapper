@@ -44,6 +44,16 @@ docker_build_with_restart('hradec',
 )
 
 
+local_resource(
+    'reg-hradec',
+    'cd hradec && go generate cmd/main.go',
+    ignore=[
+    './hradec/graph/**/*.go*',
+    './hradec/graph/generated',
+    './hradec/graph/model',
+    ],
+   resource_deps=['postgresql']
+)
 
 
 name = "hradec"

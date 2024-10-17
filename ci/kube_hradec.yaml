@@ -34,7 +34,7 @@ spec:
             - name: SERVICE_NAME
               value: hradec
             - name: DATABASE_URL
-              value: "postgres://postgres:postgres@postgresql-hradec-database:5432/demeter?sslmode=disable"
+              value: "postgres://postgres:postgres@postgresql-hradec-database:5432/hradec?sslmode=disable"
             - name: ENABLE_FILE_LOGGER
               value: "true"
             - name: ENABLE_DEBUG_LOGGER

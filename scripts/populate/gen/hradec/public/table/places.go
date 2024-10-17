@@ -33,6 +33,8 @@ type placesTable struct {
 	Address           postgres.ColumnString
 	Point             postgres.ColumnString
 	LikeCount         postgres.ColumnInteger
+	Lat               postgres.ColumnFloat
+	Lon               postgres.ColumnFloat
 
 	AllColumns     postgres.ColumnList
 	MutableColumns postgres.ColumnList
@@ -89,8 +91,10 @@ func newPlacesTableImpl(schemaName, tableName, alias string) placesTable {
 		AddressColumn           = postgres.StringColumn("address")
 		PointColumn             = postgres.StringColumn("point")
 		LikeCountColumn         = postgres.IntegerColumn("like_count")
-		allColumns              = postgres.ColumnList{IDColumn, TypeColumn, SubTypeColumn, NameColumn, DescriptionColumn, AccessibilityColumn, AccessibilityNoteColumn, CapacityColumn, CapacityNoteColumn, PhonesColumn, WebColumn, OkresColumn, ObceColumn, AddressColumn, PointColumn, LikeCountColumn}
-		mutableColumns          = postgres.ColumnList{TypeColumn, SubTypeColumn, NameColumn, DescriptionColumn, AccessibilityColumn, AccessibilityNoteColumn, CapacityColumn, CapacityNoteColumn, PhonesColumn, WebColumn, OkresColumn, ObceColumn, AddressColumn, PointColumn, LikeCountColumn}
+		LatColumn               = postgres.FloatColumn("lat")
+		LonColumn               = postgres.FloatColumn("lon")
+		allColumns              = postgres.ColumnList{IDColumn, TypeColumn, SubTypeColumn, NameColumn, DescriptionColumn, AccessibilityColumn, AccessibilityNoteColumn, CapacityColumn, CapacityNoteColumn, PhonesColumn, WebColumn, OkresColumn, ObceColumn, AddressColumn, PointColumn, LikeCountColumn, LatColumn, LonColumn}
+		mutableColumns          = postgres.ColumnList{TypeColumn, SubTypeColumn, NameColumn, DescriptionColumn, AccessibilityColumn, AccessibilityNoteColumn, CapacityColumn, CapacityNoteColumn, PhonesColumn, WebColumn, OkresColumn, ObceColumn, AddressColumn, PointColumn, LikeCountColumn, LatColumn, LonColumn}
 	)
 
 	return placesTable{
@@ -113,6 +117,8 @@ func newPlacesTableImpl(schemaName, tableName, alias string) placesTable {
 		Address:           AddressColumn,
 		Point:             PointColumn,
 		LikeCount:         LikeCountColumn,
+		Lat:               LatColumn,
+		Lon:               LonColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

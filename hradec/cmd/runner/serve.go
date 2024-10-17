@@ -3,6 +3,8 @@ package runner
 import (
 	"hradec/internal/config"
 	"hradec/internal/handlers"
+	"hradec/internal/ports/database"
+	"hradec/internal/usecases"
 
 	"encoding/json"
 	"hradec/internal/setup"
@@ -40,12 +42,18 @@ func setupService(configuration *config.Config) (*HradecServerComponents, error)
 
 	logger.Info("Logger initialized successfully")
 	logger.Info(string(s))
+	dbconn, err := setup.SetupDb(configuration)
+	if err != nil {
+		return nil, err
+	}
+	placeStore := database.NewDatabasePlaceStore(dbconn)
+	placeUsecase := usecases.NewPlaceUsecase(placeStore)
 
-	placeHandler := handlers.NewPlaceHandler()
+	placeHandler := handlers.NewPlaceHandler(placeUsecase)
 
 	router := mux.NewRouter()
-	router.Handle("/ping", placeHandler.Ping()).Methods("GET")
 	router.Handle("/", placeHandler.Ping()).Methods("GET")
+	router.Handle("/places", placeHandler.GetPlacesByViewport()).Methods("GET")
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedHeaders:   []string{"*"},

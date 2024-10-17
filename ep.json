@@ -1,0 +1,67 @@
+{ // pin
+	"lat": 0.1,
+	"lng": 0.1
+}
+
+{
+    "south_east": { // pin
+	"lat": 0.1,
+	"lng": 0.1
+},
+
+    "north_west": { // pin
+	"lat": 0.1,
+	"lng": 0.1
+}
+}
+
+{
+	"ID":                "string",
+	Type              string // ENUM (divadlo, kina, festival, )
+	SubType           *string
+	Name              string
+	Description       *string
+	Accessibility     int64
+	AccessibilityNote *string
+	Capacity          *int64
+	CapacityNote      *string
+	Phones            []string
+	Email             *string
+	Web               string
+	Okres             string
+	Obec              string
+	Address           string
+	Point             Pin
+    "like_count": 2,
+    "user_attribution": {
+        "liked": "true",
+        
+    }
+}
+
+{
+    "user_id": 1023213,
+    "time_start": 219312321321, // unix timestamp
+    "time_end": 12321321, // unix timestamp
+    "types": [
+        "Kina",
+        "divadla"
+    ],
+    friends: [
+        12321321321321,
+        123213213,
+        1
+    ]
+}
+
+{
+    [
+        "nazev"
+        "cena"
+        "popis"
+        "icon"
+        "votes"
+    ]
+}
+
+

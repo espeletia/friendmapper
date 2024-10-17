@@ -7,8 +7,12 @@ import (
 	"os"
 	"regexp"
 	"scripts/populate/gen/hradec/public/model"
+	"scripts/populate/gen/hradec/public/table"
 	"strconv"
 	"strings"
+
+	"github.com/XSAM/otelsql"
+	_ "github.com/lib/pq"
 )
 
 type Pin struct {
@@ -36,16 +40,68 @@ type Place struct {
 }
 
 func run() error {
+	dbConn, err := otelsql.Open("postgres", "postgres://postgres:postgres@localhost:5434/hradec?sslmode=disable")
+	if err != nil {
+		return err
+	}
+
+	err = dbConn.Ping()
+	if err != nil {
+		return err
+	}
+
 	places, err := getAllPlaces()
 	if err != nil {
 		return err
 	}
-	fmt.Println(len(places))
+	dbplaces := mapToDB(places)
+	stmt := table.Places.INSERT(table.Places.AllColumns).MODELS(dbplaces)
+	fmt.Println(stmt.DebugSql())
+	r, err := stmt.Exec(dbConn)
+	if err != nil {
+		return err
+	}
+	rows, err := r.RowsAffected()
+	if err != nil {
+		return err
+	}
+	fmt.Println(rows)
 	return nil
 }
 
 func mapToDB(places []Place) []model.Places {
 	result := []model.Places{}
+	for _, place := range places {
+		if place.Obce != "Hradec Králové" {
+			continue
+		}
+		// Use PostGIS function to make a point
+		fmt.Printf("ST_MakePoint(%f, %f)", place.Point.Lon, place.Point.Lat)
+		var capacity32 *int32 = nil
+		if place.Capacity != nil {
+			capacity32 = toPtr(int32(*place.Capacity))
+		}
+		result = append(result, model.Places{
+			ID:                place.ID,
+			Type:              place.Type,
+			Name:              place.Name,
+			Description:       place.Description,
+			Accessibility:     int32(place.Accessibility),
+			AccessibilityNote: place.AccessibilityNote,
+			Capacity:          capacity32,
+			CapacityNote:      place.CapacityNote,
+			Web:               place.Web,
+			Okres:             place.Okres,
+			Obce:              place.Obce,
+			Address:           place.Address,
+			Lat:               &place.Point.Lat,
+			Lon:               &place.Point.Lon,
+
+			// Point:             geom,
+			// Point: toPtr(fmt.Sprintf("SRID=4326;POINT(15.850219 50.206973)", place.Point.Lon, place.Point.Lat)),
+
+		})
+	}
 	return result
 }
 
