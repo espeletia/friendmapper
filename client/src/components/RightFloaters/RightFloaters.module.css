@@ -3,10 +3,11 @@
   width: 100%;
   position: absolute;
   float: right;
-  flex-direction: column;
+  flex-direction: row;
   display: flex;
   justify-content: end;
   align-items: end;
+
 
   button {
     position: relative;
@@ -17,6 +18,27 @@
     z-index: 10000;
     border-radius: 1.5rem;
   }
+
+
+}
+
+.ctr{
+
+  
+
+
+  button {
+    position: relative;
+    
+    margin-right: 0.5rem;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    z-index: 10000;
+    border-radius: 1.5rem;
+  }
+
+  
 }
 
 .header {

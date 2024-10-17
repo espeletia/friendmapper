@@ -1,0 +1,32 @@
+.select {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 12px; /* Rounded corners */
+    font-size: 16px;
+    outline: none;
+  }
+  
+  .select::placeholder {
+    color: #b3b3b3; /* Light gray placeholder text */
+    
+  }
+  
+  .select:focus {
+    border-color: #888; /* Slightly darker border on focus */
+  }
+
+  .text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 4px;
+  }
+
+
+  
+  .fieldContainer{
+    margin-bottom: 12px;
+    flex-direction: column;
+    display: flex;
+}
