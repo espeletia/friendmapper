@@ -12,6 +12,8 @@ RUN addgroup -S nonroot \
 RUN chown -R nonroot:nonroot /app
 USER nonroot
 
+EXPOSE 8080
+
 ENTRYPOINT ./start_server
 
 
