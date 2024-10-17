@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { Books, Castle, LuckyClover, Palete, Song, StrongMan } from "../../svg";
+import { Castle, Palete, Song, StrongMan } from "../../svg";
 import Selector from "./components/Selector";
 import styles from "./Filters.module.css";
 
 const Filters = () => {
   const [selectors, setSelectors] = useState([
-    { selected: true, name: "Vše", icon: <Palete />, deseletsAll: true },
-    { selected: false, name: "Festivaly", icon: <Castle /> },
-    { selected: false, name: "Divadla", icon: <Song /> },
-    { selected: false, name: "Kina", icon: <StrongMan /> },
-    { selected: false, name: "Sport", icon: <Books /> },
-    { selected: false, name: "Lucky", icon: <LuckyClover /> },
+    { selected: true, name: "Vše", icon: null, deseletsAll: true },
+    { selected: false, name: "Festivaly", icon: <Song /> },
+    { selected: false, name: "Divadla", icon: <Palete /> },
+    { selected: false, name: "Kina", icon: <Castle />},
+    { selected: false, name: "Sport", icon: <StrongMan />  },
   ]);
 
   const handleChange = (index: number) => {
@@ -50,6 +49,7 @@ const Filters = () => {
           >
             <>
               {selector.icon}
+              {selector.icon && <span className={styles.gap}></span>}
               {selector.name}
             </>
           </Selector>
